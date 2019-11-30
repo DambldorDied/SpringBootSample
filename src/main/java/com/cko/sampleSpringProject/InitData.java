@@ -8,6 +8,7 @@ import com.cko.sampleSpringProject.service.AuthorityService;
 import com.cko.sampleSpringProject.service.SMSCService;
 import com.cko.sampleSpringProject.service.UserService;
 
+import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -33,14 +34,22 @@ public class InitData {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    Faker faker = new Faker();
+
     public void initData() {
 
-        Film film = new Film("Jumanji", 9, 12);
-        filmDAO.save(film);
-//        smscSender.send_sms("89775548911","TEST MESSAGE",1, "", "", 0, "", "");
+        initFilms();
         initUserAndRoles();
 
+    }
 
+
+
+    private void initFilms() {
+        for (int i = 0; i < 10; i++) {
+            Film film = new Film(faker.superhero().name(), i, i*2);
+            filmDAO.save(film);
+        }
     }
 
     private void initUserAndRoles(){

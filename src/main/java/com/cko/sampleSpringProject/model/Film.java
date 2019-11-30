@@ -20,6 +20,10 @@ public class Film {
         this.age = age;
     }
 
+    public Film() {
+
+    }
+
     public void setId(long id) {
         this.id = id;
     }
