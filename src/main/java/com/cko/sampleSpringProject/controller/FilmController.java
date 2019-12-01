@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -18,28 +21,46 @@ public class FilmController {
     @Autowired
     FilmDAO filmDAO;
     @GetMapping("/all")
-    public String showMapFilms() {
-        return "allFilms";
+    public ModelAndView showMapFilms() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("allFilms");
+        List<Film> filmsList = filmDAO.findAll();
+        modelAndView.addObject("films", filmsList);
+        return modelAndView;
     }
     @GetMapping("/add")
     public String showCreateFilm() { return "createFilms"; }
     @GetMapping("/edit")
     public ModelAndView showEditFilm(@RequestParam Long id) {
         ModelAndView modelAndView = new ModelAndView();
-        Optional<Film> optional = filmDAO.findById(id);
-        Film film = optional.get();
+        Film film = filmDAO.findFilmById(id);
         modelAndView.addObject("film", film);
         modelAndView.setViewName("editFilm");
         return modelAndView;
     }
+
+    @GetMapping("/delete")
+    @Transactional
+    public String showDeletePage(@RequestParam Long id) {
+        filmDAO.deleteFilmById(id);
+        return "deletePage";
+    }
+    @GetMapping("/onefilm")
+    public ModelAndView showOneFilm(@RequestParam Long id) {
+        ModelAndView modelAndView = new ModelAndView();
+        Film film = filmDAO.findFilmById(id);
+        modelAndView.addObject("film", film);
+        modelAndView.setViewName("cardFilm");
+        return modelAndView;
+    }
     @PostMapping("/edit")
-    public String editFilm(Film film) {
+    public RedirectView editFilm(Film film) {
         filmDAO.save(film);
-        return "allFilms";
+        return new RedirectView("/films/all");
     }
     @PostMapping("/add")
     public String addNewFilm(Film film) {
         filmDAO.save(film);
-        return "allFilms";
+        return "redirect : /films/all";
     }
 }

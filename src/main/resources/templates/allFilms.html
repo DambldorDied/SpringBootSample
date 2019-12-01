@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>All films</title>
 </head>
@@ -9,27 +10,31 @@
 <div class="container">
     <div class="row">
         <caption align="center">Films</caption>
-        <table border="1" width="100%" cellspacing="18px" align="center">
-            <tr class="font-weight-light">
-                <td>Title</td>
-                <td>Raiting</td>
-                <td>Age</td>
-                <td></td>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Raiting</th>
+                <th scope="col">Age</th>
+                <th scope="col">Actions</th>
             </tr>
-
-            <tr class="font-weight-light">
-                <td>Jumanji</td>
-                <td>9</td>
-                <td>12+</td>
-                <td height="20">
-                    <button type="button" class="btn btn-primary">Edit</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+            </thead>
+            <tbody>
+            <tr th:each="film : ${films}">
+                <td th:value="${film.id}"></td>
+                <td th:value="${film.title}"></td>
+                <td th:value="${film.raiting}"></td>
+                <td th:value="${film.age}"></td>
+                <td>
+                    <a th:href="@{ '/films/edit?id=' + ${film.id}}" class="btn btn-success">Изменить</a>
+                    <a th:href="@{ '/films/onefilm?id=' + ${film.id}}" class="btn btn-info">Ближе</a>
+                    <a th:href="@{ '/films/delete?id=' + ${film.id}}" class="btn btn-info">Удалить</a>
                 </td>
             </tr>
-
-
+            </tbody>
         </table>
-        <button align="center" height="20" type="button" class="btn btn-primary" href="localhost:8080/films/add">Add</button>
+        <a align="center" class="btn btn-primary" th:href="@{'/films/add'}">Add</a>
     </div>
 </div>
 </body>
