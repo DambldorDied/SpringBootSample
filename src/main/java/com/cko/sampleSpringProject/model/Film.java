@@ -1,5 +1,7 @@
 package com.cko.sampleSpringProject.model;
 
+import com.github.javafaker.Food;
+
 import javax.persistence.*;
 
 @Entity
@@ -20,7 +22,7 @@ public class Film {
         this.age = age;
     }
 
-    public Film() {
+    public Film(int i, Food food, int i1, int i2) {
 
     }
 
